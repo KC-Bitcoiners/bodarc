@@ -2,7 +2,7 @@ name: staticS3Deploy
 
 on:
   push:
-    branches: ["master", "dev", "bugFix", "static"]
+    branches: ["master", "dev", "bugFix", "nsyteDebug"]
   schedule:
     - cron: "0 0 * * 1,3,6"
 
@@ -49,7 +49,7 @@ jobs:
         uses: auggie-lahey/nsite-action@0.0.0
         continue-on-error: false
         with:
-          nbunksec: nbunksec1qqswe02m3rug0l406xem25rlsrtmksgu3zrng5t0xa2yjkw7ph0je0gpyr7h3l6fqd0s9mmzs7hc5y3e7cazmduqt5erdx8a7vqatyrq7vpxjqs5waehxw309aex2mrp0yhxuum9vvhxzursev3zaa 
+          nbunksec: nbunksec1qqs82wlw2jm6u499tx62sy0y8axrf3fepwvrsgzgwefschr3w9t4tacpypqh9ly7g3s43z4ph7hnxd67sh8vuupzs3t36lqpv2nmm6kmsjx5cqs5waehxw309aex2mrp0yhxuum9vvhxzurses4wur 
           #${{ secrets.NBUNKSEC }}
           directory: './out'  
           relays: |
