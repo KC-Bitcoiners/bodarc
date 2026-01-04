@@ -21,6 +21,8 @@ export default function Home() {
 
       {/* Main Content Section - White Background */}
       <section className="bg-white text-black py-16">
+        <div className="container mx-auto px-6 max-w-6xl ">
+          {/* Title */}
           <h1 className="text-4xl md:text-6xl font-black mb-6 font-archivo-black">
             {config.pages.home.hero.title}
           </h1>
@@ -51,6 +53,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
