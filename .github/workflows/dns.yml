@@ -1,4 +1,4 @@
-name: staticS3Deploy
+name: DNS
 
 on:
   push:
