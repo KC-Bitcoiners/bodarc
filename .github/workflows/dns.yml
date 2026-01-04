@@ -4,6 +4,9 @@ on:
   push:
     branches: ["master", "stateFix"]
 
+permissions:
+  contents: write # Required to update state
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
