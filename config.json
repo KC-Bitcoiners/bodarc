@@ -23,7 +23,8 @@
         },
         "images": {
             "logo": "/logo.svg",
-            "logoFallback": "/logo.jpeg"
+            "logoFallback": "/logo.jpeg",
+            "hero": "/bitcoinShaka.jpg"
         }
     },
     "nostr": {
