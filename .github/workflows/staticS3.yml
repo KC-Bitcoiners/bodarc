@@ -1,7 +1,4 @@
 name: staticS3Deploy
-#nbunksec1qqswe02m3rug0l406xem25rlsrtmksgu3zrng5t0xa2yjkw7ph0je0gpyr7h3l6fqd0s9mmzs7hc5y3e7cazmduqt5erdx8a7vqatyrq7vpxjqs5waehxw309aex2mrp0yhxuum9vvhxzursev3zaa
-  #"bunkerPubkey": "nbunksec1qqswe02m3rug0l406xem25rlsrtmksgu3zrng5t0xa2yjkw7ph0je0gpyr7h3l6fqd0s9mmzs7hc5y3e7cazmduqt5erdx8a7vqatyrq7vpxjqs5waehxw309aex2mrp0yhxuum9vvhxzursev3zaa" 
-  #"cb143273402b579caf7e3c848d557f66b3ebd29bf4d1a13b75c17168be92eea1",
 
 on:
   push:
