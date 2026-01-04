@@ -23,7 +23,7 @@ export default function Home() {
       <section className="bg-white text-black py-16">
         <div className="container mx-auto px-6 max-w-6xl ">
           {/* Title */}
-          <h1 className="text-4xl md:text-6xl font-black mb-6 font-archivo-black">
+          <h1 className="text-4xl md:text-6xl font-black bitcoin-orange mb-16 text-center font-archivo-black">
             {config.pages.home.hero.title}
           </h1>
 
