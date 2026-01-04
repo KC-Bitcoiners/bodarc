@@ -2,7 +2,7 @@ name: DNS
 
 on:
   push:
-    branches: ["master", "stateFix"]
+    branches: ["master"]
 
 permissions:
   contents: write # Required to update state
