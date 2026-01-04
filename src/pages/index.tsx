@@ -19,25 +19,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Hero Section - Using background image from config */}
-      <section 
-        className="relative bg-cover bg-center bg-no-repeat py-32"
-        style={{
-          backgroundImage: config.site.images.hero.startsWith('http') 
-            ? `url(${config.site.images.hero})` 
-            : `url(${config.site.images.hero})`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className="relative z-10 container mx-auto px-6 text-center text-white">
+      {/* Main Content Section - White Background */}
+      <section className="bg-white text-black py-16">
           <h1 className="text-4xl md:text-6xl font-black mb-6 font-archivo-black">
             {config.pages.home.hero.title}
           </h1>
-        </div>
-      </section>
 
-      {/* Main Content Section - White Background */}
-      <section className="bg-white text-black py-16">
         <div className="container mx-auto px-6 max-w-6xl ">
 
           {/* Two Column Layout */}
