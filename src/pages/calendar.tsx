@@ -20,7 +20,7 @@ import {
 } from "../utils/nostrEvents";
 import { PlusIcon } from "../components/Icons";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { WHITELISTED_NPUBS, WHITELISTED_PUBKEYS } from "../config/whitelist";
+import { WHITELISTED_NPUBS, WHITELISTED_PUBKEYS } from "@/config";
 import { useNostr } from "../contexts/NostrContext";
 
 interface CalendarPageProps {
@@ -534,20 +534,6 @@ export default function CalendarPage({
       .map((paragraph) => paragraph.trim());
   };
 
-  if (meetupError) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <p className="text-red-600">
-              Unable to load meetup events at this time. Please try again later.
-            </p>
-            <p className="text-sm text-red-500 mt-2">{meetupError}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-12">
