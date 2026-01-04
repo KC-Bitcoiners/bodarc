@@ -4,6 +4,7 @@ import VendorForm from "@/components/VendorForm";
 import { useNostr } from "@/contexts/NostrContext";
 import { fetchBTCMapVendors, BTCMapVendor } from "@/utils/btcmap";
 import { pool } from "@/lib/nostr";
+import { config } from "@/config";
 import type { Icon, LatLngBounds, DivIcon } from "leaflet";
 import { getEventHash, type NostrEvent } from "applesauce-core/helpers/event";
 
@@ -708,7 +709,7 @@ export default function ShopPage() {
                 style={{ height: "500px" }}
               >
                 <MapContainer
-                  center={[39.03219, -94.58101]} // Kansas City center
+                  center={[config.site.organization.coordinates.lat, config.site.organization.coordinates.lon]}
                   zoom={12}
                   style={{ height: "100%", width: "100%" }}
                   bounds={

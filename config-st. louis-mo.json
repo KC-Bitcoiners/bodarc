@@ -1,30 +1,30 @@
 {
     "site": {
-        "title": "Santa Fe Bitcoin Meetup Group",
-        "description": "Bitcoin only group focused on fostering relationships and building community in Santa Fe",
+        "title": "St. Louis Bitcoin Meetup Group",
+        "description": "Bitcoin only group focused on fostering relationships and building community in St. Louis",
         "organization": {
-            "name": "Santa Fe Bitcoiners",
-            "location": "Santa Fe, NM",
+            "name": "St. Louis Bitcoiners",
+            "location": "St. Louis, MO",
             "coordinates": {
-                "lat": 35.6876096,
-                "lon": -105.9384560
+                "lat": 38.6280278,
+                "lon": -90.1910154
             }
         },
         "externalLinks": {
-    "GitHub": {
-        "url": "https://github.com/santa-fe-bitcoiners/website",
-        "icon": "GitHubIcon",
-        "ariaLabel": "Visit our GitHub repository"
-    }, 
+            "GitHub": {
+                "url": "https://github.com/KC-Bitcoiners/website",
+                "icon": "GitHubIcon",
+                "ariaLabel": "Visit our GitHub repository"
+            }, 
             "meetup": {
-                "urlname": "santa-fe-bitcoin-meetup-group",
-                "url": "https://www.meetup.com/santa-fe-bitcoin-meetup-group/"
+                "urlname": "st. louis-bitcoin-meetup-group",
+                "url": "https://www.meetup.com/st. louis-bitcoin-meetup-group/"
             }
         },
         "images": {
-            "logo": "https://places.travel/wp-content/uploads/2021/03/GettyImages-1047316896-scaled.jpg",
+            "logo": "/logo.svg",
             "logoFallback": "/logo.jpeg",
-            "hero": "https://places.travel/wp-content/uploads/2021/03/GettyImages-1047316896-scaled.jpg"
+            "hero": "/bitcoinShaka.jpg"
         }
     },
     "nostr": {
@@ -44,14 +44,14 @@
     },
   "pages": {
     "home": {
-      "title": "Santa Fe Bitcoiners",
+      "title": "St. Louis Bitcoiners",
       "meta": {
-        "title": "Santa Fe Bitcoin Meetup Group",
-        "description": "Bitcoin only group focused on fostering relationships and building community in Santa Fe"
+        "title": "St. Louis Bitcoin Meetup Group",
+        "description": "Bitcoin only group focused on fostering relationships and building community in St. Louis"
       },
       "hero": {
-        "title": "Santa Fe Bitcoiners",
-        "description": "We are a Bitcoin only group focused on fostering relationships and building community. We meet twice monthly throughout the Santa Fe metro area.",
+        "title": "St. Louis Bitcoiners",
+        "description": "We are a Bitcoin only group focused on fostering relationships and building community. We meet twice monthly throughout the St. Louis metro area.",
         "topics": {
           "intro": "Whether you're new to Bitcoin or a long time HODLer this group is for you. Meetups include discussions on topics such as:",
           "list": [
@@ -69,7 +69,7 @@
         "buttons": [
           {
             "text": "Join Our Meetups",
-            "url": "https://www.meetup.com/santa-fe-bitcoin-meetup-group/",
+            "url": "https://www.meetup.com/st. louis-bitcoin-meetup-group/",
             "style": "primary"
           },
           {
@@ -83,13 +83,13 @@
     "calendar": {
       "title": "Calendar",
       "meta": {
-        "title": "Calendar - Santa Fe Bitcoiners",
-        "description": "Community calendar for Santa Fe Bitcoiners events and meetups"
+        "title": "Calendar - St. Louis Bitcoiners",
+        "description": "Community calendar for St. Louis Bitcoiners events and meetups"
       },
       "api": {
         "meetup": {
           "graphqlUrl": "https://api.meetup.com/gql-ext",
-          "groupName": "santa-fe-bitcoin-meetup-group"
+          "groupName": "st. louis-bitcoin-meetup-group"
         }
       },
       "defaultView": "month",
@@ -116,31 +116,31 @@
     "shop": {
       "title": "Bitcoin Vendors",
       "meta": {
-        "title": "Bitcoin Vendors - Santa Fe Bitcoiners",
-        "description": "Directory of Bitcoin-accepting businesses in Santa Fe"
+        "title": "Bitcoin Vendors - St. Louis Bitcoiners",
+        "description": "Directory of Bitcoin-accepting businesses in St. Louis"
       },
-      "description": "Directory of Bitcoin-accepting businesses and vendors in Santa Fe area",
-      "location": "Santa Fe, NM",
+      "description": "Directory of Bitcoin-accepting businesses and vendors in St. Louis area",
+      "location": "St. Louis, MO",
       "coordinates": {
-        "lat": 35.6876096,
-        "lon": -105.9384560
+        "lat": 38.6280278,
+        "lon": -90.1910154
       },
       "api": {
         "btcmap": {
           "overpassUrl": "https://overpass-api.de/api/interpreter",
           "defaultBounds": {
-            "minLat": 34.6876096,
-            "maxLat": 36.6876096,
-            "minLon": -106.9384560,
-            "maxLon": -104.9384560
+            "minLat": 37.6280278,
+            "maxLat": 39.6280278,
+            "minLon": -91.1910154,
+            "maxLon": -89.1910154
           },
           "userAgent": "BitcoinVendorDirectory/1.0"
         }
       },
       "map": {
         "center": {
-          "lat": 35.6876096,
-          "lon": -105.9384560
+          "lat": 38.6280278,
+          "lon": -90.1910154
         },
         "defaultZoom": 12,
         "boundsPadding": [50, 50]

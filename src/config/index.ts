@@ -21,6 +21,7 @@ export interface SiteConfig {
   images: {
     logo: string;
     logoFallback: string;
+    hero: string;
   };
 }
 

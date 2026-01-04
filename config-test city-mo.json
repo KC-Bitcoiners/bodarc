@@ -1,30 +1,30 @@
 {
     "site": {
-        "title": "Santa Fe Bitcoin Meetup Group",
-        "description": "Bitcoin only group focused on fostering relationships and building community in Santa Fe",
+        "title": "Test City Bitcoin Meetup Group",
+        "description": "Bitcoin only group focused on fostering relationships and building community in Test City",
         "organization": {
-            "name": "Santa Fe Bitcoiners",
-            "location": "Santa Fe, NM",
+            "name": "Test City Bitcoiners",
+            "location": "Test City, MO",
             "coordinates": {
-                "lat": 35.6876096,
-                "lon": -105.9384560
+                "lat": 38.6298719,
+                "lon": -90.1956551
             }
         },
         "externalLinks": {
     "GitHub": {
-        "url": "https://github.com/santa-fe-bitcoiners/website",
+        "url": "https://github.com/test-city-bitcoiners/website",
         "icon": "GitHubIcon",
         "ariaLabel": "Visit our GitHub repository"
     }, 
             "meetup": {
-                "urlname": "santa-fe-bitcoin-meetup-group",
-                "url": "https://www.meetup.com/santa-fe-bitcoin-meetup-group/"
+                "urlname": "test-city-bitcoin-meetup-group",
+                "url": "https://www.meetup.com/test-city-bitcoin-meetup-group/"
             }
         },
         "images": {
-            "logo": "https://places.travel/wp-content/uploads/2021/03/GettyImages-1047316896-scaled.jpg",
+            "logo": "/logo.svg",
             "logoFallback": "/logo.jpeg",
-            "hero": "https://places.travel/wp-content/uploads/2021/03/GettyImages-1047316896-scaled.jpg"
+            "hero": "/bitcoinShaka.jpg"
         }
     },
     "nostr": {
@@ -44,14 +44,14 @@
     },
   "pages": {
     "home": {
-      "title": "Santa Fe Bitcoiners",
+      "title": "Test City Bitcoiners",
       "meta": {
-        "title": "Santa Fe Bitcoin Meetup Group",
-        "description": "Bitcoin only group focused on fostering relationships and building community in Santa Fe"
+        "title": "Test City Bitcoin Meetup Group",
+        "description": "Bitcoin only group focused on fostering relationships and building community in Test City"
       },
       "hero": {
-        "title": "Santa Fe Bitcoiners",
-        "description": "We are a Bitcoin only group focused on fostering relationships and building community. We meet twice monthly throughout the Santa Fe metro area.",
+        "title": "Test City Bitcoiners",
+        "description": "We are a Bitcoin only group focused on fostering relationships and building community. We meet twice monthly throughout the Test City metro area.",
         "topics": {
           "intro": "Whether you're new to Bitcoin or a long time HODLer this group is for you. Meetups include discussions on topics such as:",
           "list": [
@@ -69,7 +69,7 @@
         "buttons": [
           {
             "text": "Join Our Meetups",
-            "url": "https://www.meetup.com/santa-fe-bitcoin-meetup-group/",
+            "url": "https://www.meetup.com/test-city-bitcoin-meetup-group/",
             "style": "primary"
           },
           {
@@ -83,13 +83,13 @@
     "calendar": {
       "title": "Calendar",
       "meta": {
-        "title": "Calendar - Santa Fe Bitcoiners",
-        "description": "Community calendar for Santa Fe Bitcoiners events and meetups"
+        "title": "Calendar - Test City Bitcoiners",
+        "description": "Community calendar for Test City Bitcoiners events and meetups"
       },
       "api": {
         "meetup": {
           "graphqlUrl": "https://api.meetup.com/gql-ext",
-          "groupName": "santa-fe-bitcoin-meetup-group"
+          "groupName": "test-city-bitcoin-meetup-group"
         }
       },
       "defaultView": "month",
@@ -116,31 +116,31 @@
     "shop": {
       "title": "Bitcoin Vendors",
       "meta": {
-        "title": "Bitcoin Vendors - Santa Fe Bitcoiners",
-        "description": "Directory of Bitcoin-accepting businesses in Santa Fe"
+        "title": "Bitcoin Vendors - Test City Bitcoiners",
+        "description": "Directory of Bitcoin-accepting businesses in Test City"
       },
-      "description": "Directory of Bitcoin-accepting businesses and vendors in Santa Fe area",
-      "location": "Santa Fe, NM",
+      "description": "Directory of Bitcoin-accepting businesses and vendors in Test City area",
+      "location": "Test City, MO",
       "coordinates": {
-        "lat": 35.6876096,
-        "lon": -105.9384560
+        "lat": 38.6298719,
+        "lon": -90.1956551
       },
       "api": {
         "btcmap": {
           "overpassUrl": "https://overpass-api.de/api/interpreter",
           "defaultBounds": {
-            "minLat": 34.6876096,
-            "maxLat": 36.6876096,
-            "minLon": -106.9384560,
-            "maxLon": -104.9384560
+            "minLat": 37.6298719,
+            "maxLat": 39.6298719,
+            "minLon": -91.1956551,
+            "maxLon": -89.1956551
           },
           "userAgent": "BitcoinVendorDirectory/1.0"
         }
       },
       "map": {
         "center": {
-          "lat": 35.6876096,
-          "lon": -105.9384560
+          "lat": 38.6298719,
+          "lon": -90.1956551
         },
         "defaultZoom": 12,
         "boundsPadding": [50, 50]
