@@ -17,7 +17,7 @@ jobs:
       - id: plan
         run: |
           cd terraform; pwd; ls -lah
-          terraform import --var-file=envs/prod.tfvars --var="api_key=${{ secrets.DREAMHOST_KEY }}" dreamhost_dns_record.dns_records[\"relay\"] "relay.kcbitcoiners.com"
+          terraform import --var-file=envs/prod.tfvars --var="api_key=${{ secrets.DREAMHOST_KEY }}" dreamhost_dns_record.dns_records[\"relay\"] "A|relay.kcbitcoiners.com.139.144.226.121"
           terraform apply -no-color --var-file=envs/prod.tfvars --var="api_key=${{ secrets.DREAMHOST_KEY }}" --auto-approve
           cat terraform.tfstate
           git add .; git commit -m 'updated state'; git push
