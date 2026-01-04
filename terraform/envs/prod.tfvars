@@ -1,5 +1,5 @@
 dns_records = {
-    tester = {
+    testing = {
         type = "CNAME"
         points_to = "example.com"
     }
