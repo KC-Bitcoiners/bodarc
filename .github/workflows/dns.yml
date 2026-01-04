@@ -2,7 +2,7 @@ name: staticS3Deploy
 
 on:
   push:
-    branches: ["master"]
+    branches: ["master", "otherDNSTypes"]
 
 jobs:
   deploy:
