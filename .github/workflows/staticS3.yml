@@ -49,8 +49,7 @@ jobs:
         uses: auggie-lahey/nsite-action@0.0.0
         continue-on-error: false
         with:
-          nbunksec: nbunksec1qqs82wlw2jm6u499tx62sy0y8axrf3fepwvrsgzgwefschr3w9t4tacpyqmvkdnpye02nnwx54hhfg9uqfyqzt26lhd63n6k9lr6fv82hyelwqs5waehxw309aex2mrp0yhxuum9vvhxzursvcm95n 
-          #${{ secrets.NBUNKSEC }}
+          nbunksec: ${{ secrets.NBUNKSEC }}
           directory: './out'  
           relays: |
             wss://relay.nsite.lol
@@ -60,9 +59,9 @@ jobs:
             https://cdn.sovbit.host
           concurrency: 4
           fallback: /index.html
-          # publish_relay_list: true
-          # publish_server_list: true
-          # publish_profile: true
+          publish_relay_list: true
+          publish_server_list: true
+          publish_profile: true
           verbose: false
           purge: true
           force: true
