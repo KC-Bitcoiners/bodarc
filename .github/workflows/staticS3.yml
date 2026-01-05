@@ -49,7 +49,7 @@ jobs:
         uses: auggie-lahey/nsite-action@0.0.0
         continue-on-error: false
         with:
-          nbunksec: nbunksec1qqs82wlw2jm6u499tx62sy0y8axrf3fepwvrsgzgwefschr3w9t4tacpypqh9ly7g3s43z4ph7hnxd67sh8vuupzs3t36lqpv2nmm6kmsjx5cqs5waehxw309aex2mrp0yhxuum9vvhxzurses4wur 
+          nbunksec: nbunksec1qqs82wlw2jm6u499tx62sy0y8axrf3fepwvrsgzgwefschr3w9t4tacpyqmvkdnpye02nnwx54hhfg9uqfyqzt26lhd63n6k9lr6fv82hyelwqs5waehxw309aex2mrp0yhxuum9vvhxzursvcm95n 
           #${{ secrets.NBUNKSEC }}
           directory: './out'  
           relays: |
