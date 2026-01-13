@@ -113,6 +113,45 @@
         "endTime": "14:00"
       }
     },
+    "events": {
+      "title": "Events",
+      "meta": {
+        "title": "Events - KC Bitcoiners",
+        "description": "Bitcoin meetups, educational sessions, and community building in Kansas City"
+      },
+      "header": {
+        "title": "Events",
+        "description": "Join us for Bitcoin meetups, educational sessions, and community building in Kansas City. All skill levels welcome - from Bitcoin beginners to seasoned hodlers!"
+      },
+      "sections": {
+        "upcoming": {
+          "title": "Upcoming Events",
+          "noEventsMessage": "No upcoming events scheduled at the moment.",
+          "followUsMessage": "Check back soon or follow us on Meetup.com for the latest updates!"
+        },
+        "past": {
+          "title": "Past Events",
+          "showingRecentMessage": "Showing the 5 most recent past events.",
+          "viewAllText": "View all past events on Meetup.com"
+        }
+      },
+      "callToAction": {
+        "title": "Stay Connected",
+        "description": "Don't miss out on any Bitcoin discussions and networking opportunities. Join our Meetup group to get notified about new events and connect with fellow Bitcoin enthusiasts in Kansas City.",
+        "buttonText": "Join Our Meetup Group"
+      },
+      "calendar": {
+        "webcalUrl": "webcal://kcbitcoiners.com/events.ics",
+        "downloadFilename": "kansas-city-bitcoin-events.ics",
+        "buttonText": "🗓️ Add to Calendar",
+        "ical": {
+          "domain": "kansas-city-bitcoin-meetup.com",
+          "prodId": "//Kansas City Bitcoiners//Events//EN",
+          "defaultDescription": "Bitcoin meetups and events in Kansas City",
+          "timezone": "America/Chicago"
+        }
+      }
+    },
     "shop": {
       "title": "Bitcoin Vendors",
       "meta": {
