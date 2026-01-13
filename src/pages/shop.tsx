@@ -4,7 +4,7 @@ import VendorForm from "@/components/VendorForm";
 import { useNostr } from "@/contexts/NostrContext";
 import { fetchBTCMapVendors, BTCMapVendor } from "@/utils/btcmap";
 import { pool } from "@/lib/nostr";
-import { config, nostrRelays } from "@/config";
+import { config, nostrRelays, getWhitelistFilter } from "@/config";
 import type { Icon, LatLngBounds, DivIcon } from "leaflet";
 import { getEventHash, type NostrEvent } from "applesauce-core/helpers/event";
 
@@ -151,7 +151,12 @@ export default function ShopPage() {
       try {
         const relays = nostrRelays;
 
+        // Use whitelist filter to only get events from whitelisted users
+        const whitelistFilter = getWhitelistFilter();
+        
+        // Modify the whitelist filter for vendor events (kind 30333 instead of calendar kinds)
         const filter = {
+          ...whitelistFilter,
           kinds: [30333], // Custom Bitcoin Vendor Directory kind
           limit: 100,
         };
@@ -183,9 +188,9 @@ export default function ShopPage() {
 
         const events = await eventsPromise;
         console.log(
-          "📝 Fetching nostr events:",
+          "📝 Fetching nostr vendor events:",
           events.length,
-          "total events found",
+          "total events found from whitelisted authors only",
         );
 
         const vendors: NostrVendor[] = [];
