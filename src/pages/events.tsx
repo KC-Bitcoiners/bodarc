@@ -2,6 +2,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import EventCard from "../components/EventCard";
 import { generateICalendarFile } from "../utils/icalendar";
 import { fetchMeetupEvents, getVenueAddress, MeetupGroup } from "../lib/meetup";
+import { getMeetupUrl } from "../config";
 
 interface EventsPageProps {
   group: MeetupGroup | null;
@@ -142,7 +143,7 @@ export default function EventsPage({
             <p className="text-gray-500">
               Check back soon or follow us on{" "}
               <a
-                href="https://www.meetup.com/kansas-city-bitcoin-meetup-group/"
+                href={getMeetupUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bitcoin-orange hover:underline font-semibold"
@@ -181,7 +182,7 @@ export default function EventsPage({
               <p className="text-gray-500">
                 Showing the 5 most recent past events.{" "}
                 <a
-                  href="https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/past/"
+                  href={`${getMeetupUrl()}events/past/`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bitcoin-orange hover:underline font-semibold"
@@ -206,7 +207,7 @@ export default function EventsPage({
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="https://www.meetup.com/kansas-city-bitcoin-meetup-group/"
+            href={getMeetupUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-bitcoin-orange text-white px-8 py-3 rounded-lg font-semibold hover:bg-bitcoin-orange-hover transition-colors"
