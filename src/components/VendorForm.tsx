@@ -2,6 +2,7 @@ import { useNostr } from "@/contexts/NostrContext";
 import { naddrEncode } from "applesauce-core/helpers";
 import { useEffect, useState } from "react";
 import { XIcon } from "./Icons";
+import { nostrRelays } from "@/config";
 
 // RochesterKC business data
 const ROCHESTERKC_DATA = {
@@ -400,11 +401,7 @@ export default function VendorForm({
       console.log("✅ Vendor event signed:", signedEvent.id);
 
       // Publish to relays
-      const relays = [
-        "wss://relay.damus.io",
-        "wss://relay.snort.social",
-        "wss://nos.lol",
-      ];
+      const relays = nostrRelays;
 
       let publishSuccess = false;
       let publishedEventId = "";

@@ -1,4 +1,4 @@
-import { getWhitelistFilter, WHITELISTED_NPUBS } from "@/config";
+import { getWhitelistFilter, WHITELISTED_NPUBS, nostrRelays } from "@/config";
 import { pool } from "@/lib/nostr";
 import {
   decodePointer,
@@ -31,11 +31,7 @@ export async function fetchNostrCalendarEvents(): Promise<
   console.log("📅 Starting to fetch nostr calendar events...");
 
   // Use relay pool to connect to multiple relays
-  const relays = [
-    "wss://relay.damus.io",
-    "wss://relay.snort.social",
-    "wss://nos.lol",
-  ];
+  const relays = nostrRelays;
 
   // Use whitelist filter to only get events from whitelisted users
   const filter = getWhitelistFilter();
@@ -364,11 +360,7 @@ export async function publishNostrEvent(
     }
 
     // Actually publish to relays using RelayPool
-    const relays = [
-      "wss://relay.damus.io",
-      "wss://relay.snort.social",
-      "wss://nos.lol",
-    ];
+    const relays = nostrRelays;
 
     console.log("📡 Publishing to relays:", relays);
     console.log("📝 Event data:", signedEvent);

@@ -4,16 +4,12 @@ import VendorForm from "@/components/VendorForm";
 import { useNostr } from "@/contexts/NostrContext";
 import { fetchBTCMapVendors, BTCMapVendor } from "@/utils/btcmap";
 import { pool } from "@/lib/nostr";
-import { config } from "@/config";
+import { config, nostrRelays } from "@/config";
 import type { Icon, LatLngBounds, DivIcon } from "leaflet";
 import { getEventHash, type NostrEvent } from "applesauce-core/helpers/event";
 
 // Relay configuration for Nostr operations
-const RELAYS = [
-  "wss://relay.damus.io",
-  "wss://nos.lol",
-  "wss://relay.snort.social",
-];
+const RELAYS = nostrRelays;
 
 // Dynamically import Leaflet components to avoid SSR issues
 const MapContainer = dynamic(
@@ -103,7 +99,7 @@ export default function ShopPage() {
     npub: string,
   ): Promise<{ name?: string; picture?: string }> => {
     try {
-      const relays = ["wss://relay.damus.io", "wss://nos.lol"];
+      const relays = nostrRelays;
 
       const filter = {
         kinds: [0], // Metadata event
@@ -153,11 +149,7 @@ export default function ShopPage() {
       setNostrError(null);
 
       try {
-        const relays = [
-          "wss://relay.damus.io",
-          "wss://nos.lol",
-          "wss://relay.snort.social",
-        ];
+        const relays = nostrRelays;
 
         const filter = {
           kinds: [30333], // Custom Bitcoin Vendor Directory kind
