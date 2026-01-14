@@ -64,7 +64,7 @@ jobs:
           publish_profile: true
           verbose: false
           purge: true
-          force: true
+          # force: true
           
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
