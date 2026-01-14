@@ -30,9 +30,10 @@
   "nostr": {
       "relays": [
           "wss://relay.damus.io",
+          "wss://nostr21.com",
           "wss://nos.lol",
           "wss://relay.snort.social",
-          "wss://kcbtc.hzrd149.com"
+          "wss://relay.kcbitcoiners.com"
       ],
       "whitelistedNpubs": [
           "npub16ux4qzg4qjue95vr3q327fzata4n594c9kgh4jmeyn80v8k54nhqg6lra7",
