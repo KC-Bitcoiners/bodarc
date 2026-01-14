@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import QRCode from "qrcode";
 import { WHITELISTED_PUBKEYS, nostrRelays } from "@/config";
 import { pool } from "@/lib/nostr";
 import { normalizeToPubkey } from "applesauce-core/helpers";
+import { nip19 } from "nostr-tools";
 
 export interface Zapraiser {
   id: string;
@@ -80,10 +82,143 @@ const ProgressBar = ({
           className="bg-bitcoin-orange h-3 rounded-full"
           style={{
             width: `${displayPercentage}%`,
-            transition: displayPercentage === 0 ? "none" : "width 1s ease-out",
+            transition: displayPercentage === 0 ? "none" : "width 3s ease-out",
           }}
         />
       </div>
+    </div>
+  );
+};
+
+// Three dot menu component for note ID
+const NoteIdMenu = ({ noteId }: { noteId: string }) => {
+  const [showMenu, setShowMenu] = useState(false);
+
+  const copyNoteId = () => {
+    navigator.clipboard.writeText(noteId);
+    setShowMenu(false);
+  };
+
+  return (
+    <div className="relative inline-block">
+      <button
+        onClick={() => setShowMenu(!showMenu)}
+        className="p-1 rounded-full hover:bg-gray-100"
+      >
+        <svg
+          className="w-5 h-5 text-gray-600"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+        </svg>
+      </button>
+      {showMenu && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+          <div className="py-1">
+            <div className="px-4 py-2 text-sm text-gray-700">
+              <div className="font-medium">Note ID</div>
+              <div className="text-xs text-gray-500 truncate">{noteId}</div>
+            </div>
+            <button
+              onClick={copyNoteId}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+            >
+              Copy Note ID
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// QR Code component for note ID (njump.me URL)
+const NoteQRCode = ({ noteId }: { noteId: string }) => {
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
+
+  useEffect(() => {
+    // Generate QR code for the njump.me URL with encoded nevent
+    const nevent = nip19.neventEncode({
+      id: noteId,
+      kind: 1, // Text note event kind
+      relays: ["wss://relay.damus.io"],
+      author: "",
+    });
+    const url = `https://njump.me/${nevent}`;
+    QRCode.toDataURL(url, {
+      width: 200,
+      margin: 1,
+      color: {
+        dark: "#000000",
+        light: "#FFFFFF",
+      },
+    })
+      .then((url) => {
+        setQrCodeUrl(url);
+      })
+      .catch((err) => {
+        console.error("Error generating QR code:", err);
+      });
+  }, [noteId]);
+
+  return (
+    <div className="flex justify-center">
+      {qrCodeUrl && (
+        <div className="p-2 bg-white border border-gray-200 rounded-lg">
+          <img
+            src={qrCodeUrl}
+            alt="QR Code for zapping"
+            className="w-32 h-32"
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// QR Code component for nostr:nevent URI
+const NoteIdQRCode = ({ noteId }: { noteId: string }) => {
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
+
+  useEffect(() => {
+    // Convert note ID to a proper nevent format using nip19
+    // We need to provide the event data to create a proper nevent
+    // For now, we'll create a simple nevent with just the ID
+    const nevent = nip19.neventEncode({
+      id: noteId,
+      kind: 1, // Text note event kind
+      relays: ["wss://relay.damus.io"],
+      author: "",
+    });
+
+    QRCode.toDataURL(nevent, {
+      width: 200,
+      margin: 1,
+      color: {
+        dark: "#000000",
+        light: "#FFFFFF",
+      },
+    })
+      .then((url) => {
+        setQrCodeUrl(url);
+      })
+      .catch((err) => {
+        console.error("Error generating QR code:", err);
+      });
+  }, [noteId]);
+
+  return (
+    <div className="flex justify-center">
+      {qrCodeUrl && (
+        <div className="p-2 bg-white border border-gray-200 rounded-lg">
+          <img
+            src={qrCodeUrl}
+            alt="QR Code for nostr URI"
+            className="w-32 h-32"
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -252,7 +387,6 @@ async function fetchZapReceipts(zapraiserId: string): Promise<ZapReceipt[]> {
 
 // Extract zap amount from a zap receipt event
 function extractZapAmount(event: any): number {
-  return 10000;
   // Try to find amount in bolt11 tag
   const bolt11Tag = event.tags?.find((tag: string[]) => tag[0] === "bolt11");
   if (bolt11Tag && bolt11Tag[1]) {
@@ -343,6 +477,28 @@ export default function DonatePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Add a global animation style
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   // Auto-refresh zap receipts every 30 seconds
   useEffect(() => {
     if (zapraisers.length === 0) return; // Don't refresh if no zapraisers
@@ -428,7 +584,13 @@ export default function DonatePage() {
       <div className="container mx-auto px-4 py-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-8 font-archivo-black">Donate</h1>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-bitcoin-orange mx-auto"></div>
+          <div className="bitcoin-shaka-container">
+            <img
+              src="/bitcoinShaka.jpg"
+              alt="Loading..."
+              className="bitcoin-shaka-spinner"
+            />
+          </div>
           <p className="mt-4 text-gray-600">Loading zapraisers...</p>
         </div>
       </div>
@@ -453,91 +615,96 @@ export default function DonatePage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      {/* Page Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-6 font-archivo-black">Donate</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Support our community with Bitcoin zaps! These zapraisers are
-          fundraising campaigns from trusted community members. Every sat counts
-          towards building a stronger Bitcoin ecosystem.
-        </p>
-      </div>
-
       {/* zapraisers Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8 font-archivo-black bitcoin-orange">
-          Active zapraisers
+        <h2 className="text-3xl font-bold mb-8 font-archivo-black bitcoin-orange text-center">
+          Active Zapraisers
         </h2>
 
         {zapraisers.length > 0 ? (
           <div className="space-y-8">
-            {zapraisers.map((zapraiser) => (
+            {zapraisers.map((zapraiser, index) => (
               <div
                 key={zapraiser.id}
-                className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all"
+                style={{
+                  opacity: 1,
+                  transform: "translateY(0)",
+                  animation: `fadeIn 0.5s ease-in-out ${index * 0.1}s both`,
+                  animationFillMode: "both",
+                }}
               >
-                {/* Author Info */}
-                <div className="flex items-center mb-4">
-                  {zapraiser.author?.picture && (
-                    <img
-                      src={zapraiser.author.picture}
-                      alt={zapraiser.author.name || "Author"}
-                      className="w-12 h-12 rounded-full mr-3"
-                    />
-                  )}
-                  <div>
-                    <h3 className="font-semibold text-gray-900">
-                      {zapraiser.author?.name ||
-                        zapraiser.author?.display_name ||
-                        "Anonymous"}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {new Date(
-                        zapraiser.created_at * 1000,
-                      ).toLocaleDateString()}
-                    </p>
+                <div className="flex gap-6">
+                  {/* Left Column: Metadata, Note Text, and Progress Bar */}
+                  <div className="flex-grow">
+                    {/* Author Info */}
+                    <div className="flex items-center mb-4">
+                      {zapraiser.author?.picture && (
+                        <img
+                          src={zapraiser.author.picture}
+                          alt={zapraiser.author.name || "Author"}
+                          className="w-12 h-12 rounded-full mr-3"
+                        />
+                      )}
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          {zapraiser.author?.name ||
+                            zapraiser.author?.display_name ||
+                            "Anonymous"}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {new Date(
+                            zapraiser.created_at * 1000,
+                          ).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Zapraiser Content */}
+                    <div className="mb-4 text-left">
+                      <p className="text-gray-800 whitespace-pre-wrap">
+                        {zapraiser.content}
+                      </p>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mb-4">
+                      <ProgressBar
+                        key={`${zapraiser.id}-${zapraiser.current}`}
+                        current={zapraiser.current}
+                        goal={zapraiser.goal}
+                        label="Progress"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right Column: QR Code and Three Dot Menu */}
+                  <div className="flex items-center gap-2">
+                    {/* QR Code */}
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="text-xs text-gray-500">Scan to zap</div>
+                      <NoteQRCode noteId={zapraiser.id} />
+                    </div>
+
+                    {/* Three Dot Menu */}
+                    <NoteIdMenu noteId={zapraiser.id} />
                   </div>
                 </div>
 
-                {/* Zapraiser Content */}
-                <div className="mb-6">
-                  <p className="text-gray-800 whitespace-pre-wrap">
-                    {zapraiser.content}
-                  </p>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <ProgressBar
-                    key={`${zapraiser.id}-${zapraiser.current}`}
-                    current={zapraiser.current}
-                    goal={zapraiser.goal}
-                    label="Progress"
-                  />
-                </div>
-
                 {/* Stats */}
-                <div className="flex justify-between items-center text-sm text-gray-600">
-                  <span>
-                    {zapraiser.current > 0
-                      ? `${((zapraiser.current / zapraiser.goal) * 100).toFixed(1)}% funded`
-                      : "No zaps yet"}
-                  </span>
-                  <span>
-                    {zapraiser.goal - zapraiser.current > 0
-                      ? `${(zapraiser.goal - zapraiser.current).toLocaleString()} sats remaining`
-                      : "Goal reached! 🎉"}
-                  </span>
-                </div>
-
-                {/* Zap Button */}
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <p className="text-sm text-gray-500 mb-2">
-                    Note ID: {zapraiser.id}
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    Use this note ID in your favorite Nostr client to send zaps
-                  </p>
+                  <div className="flex justify-between items-center text-sm text-gray-600">
+                    <span>
+                      {zapraiser.current > 0
+                        ? `${((zapraiser.current / zapraiser.goal) * 100).toFixed(1)}% funded`
+                        : "No zaps yet"}
+                    </span>
+                    <span>
+                      {zapraiser.goal - zapraiser.current > 0
+                        ? `${(zapraiser.goal - zapraiser.current).toLocaleString()} sats remaining`
+                        : "Goal reached! 🎉"}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -573,6 +740,11 @@ export default function DonatePage() {
           <p className="mt-4">
             Only whitelisted community members can create zapraisers, ensuring
             all campaigns are from trusted sources.
+          </p>
+          <p>
+            Support our community with Bitcoin zaps! These zapraisers are
+            fundraising campaigns from trusted community members. Every sat
+            counts towards building a stronger Bitcoin ecosystem.
           </p>
         </div>
       </section>
