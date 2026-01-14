@@ -4,16 +4,12 @@ import VendorForm from "@/components/VendorForm";
 import { useNostr } from "@/contexts/NostrContext";
 import { fetchBTCMapVendors, BTCMapVendor } from "@/utils/btcmap";
 import { pool } from "@/lib/nostr";
-import { config } from "@/config";
+import { config, nostrRelays, getWhitelistFilter } from "@/config";
 import type { Icon, LatLngBounds, DivIcon } from "leaflet";
 import { getEventHash, type NostrEvent } from "applesauce-core/helpers/event";
 
 // Relay configuration for Nostr operations
-const RELAYS = [
-  "wss://relay.damus.io",
-  "wss://nos.lol",
-  "wss://relay.snort.social",
-];
+const RELAYS = nostrRelays;
 
 // Dynamically import Leaflet components to avoid SSR issues
 const MapContainer = dynamic(
@@ -103,7 +99,7 @@ export default function ShopPage() {
     npub: string,
   ): Promise<{ name?: string; picture?: string }> => {
     try {
-      const relays = ["wss://relay.damus.io", "wss://nos.lol"];
+      const relays = nostrRelays;
 
       const filter = {
         kinds: [0], // Metadata event
@@ -153,13 +149,14 @@ export default function ShopPage() {
       setNostrError(null);
 
       try {
-        const relays = [
-          "wss://relay.damus.io",
-          "wss://nos.lol",
-          "wss://relay.snort.social",
-        ];
+        const relays = nostrRelays;
 
+        // Use whitelist filter to only get events from whitelisted users
+        const whitelistFilter = getWhitelistFilter();
+        
+        // Modify the whitelist filter for vendor events (kind 30333 instead of calendar kinds)
         const filter = {
+          ...whitelistFilter,
           kinds: [30333], // Custom Bitcoin Vendor Directory kind
           limit: 100,
         };
@@ -191,9 +188,9 @@ export default function ShopPage() {
 
         const events = await eventsPromise;
         console.log(
-          "📝 Fetching nostr events:",
+          "📝 Fetching nostr vendor events:",
           events.length,
-          "total events found",
+          "total events found from whitelisted authors only",
         );
 
         const vendors: NostrVendor[] = [];
@@ -1156,11 +1153,42 @@ export default function ShopPage() {
         </div>
       )}
 
-      {/* Error State */}
+      {/* Empty State - No Vendors Found */}
       {!isLoadingNostr &&
         !isLoadingBTCMap &&
         nostrVendors.length === 0 &&
         btcMapVendors.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">🏪</div>
+            <div className="text-xl font-bold text-gray-800 mb-2">
+              No Bitcoin Vendors Found
+            </div>
+            <div className="text-lg text-gray-600 mb-6">
+              Be the first to add a Bitcoin-accepting business to our directory!
+            </div>
+            <div className="bg-gradient-to-r from-bitcoin-orange/10 to-orange-10 border border-bitcoin-orange/20 rounded-lg p-6 max-w-md mx-auto">
+              <h3 className="text-lg font-bold text-gray-800 mb-3">
+                🚀 Add Your First Vendor
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Help grow the Bitcoin ecosystem in Kansas City by submitting local businesses that accept Bitcoin payments.
+              </p>
+              <button
+                onClick={() => setShowVendorForm(true)}
+                className="px-6 py-3 bg-bitcoin-orange text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-bitcoin-orange focus:ring-offset-2"
+              >
+                Submit New Vendor
+              </button>
+            </div>
+          </div>
+        )}
+
+      {/* Error State */}
+      {!isLoadingNostr &&
+        !isLoadingBTCMap &&
+        nostrVendors.length === 0 &&
+        btcMapVendors.length === 0 &&
+        (nostrError || btcMapError) && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">⚠️</div>
             <div className="text-lg text-gray-600 mb-2">

@@ -3,7 +3,7 @@ import { EventStore } from "applesauce-core/event-store";
 import { Filter, persistEventsToCache } from "applesauce-core/helpers";
 import { createEventLoaderForStore } from "applesauce-loaders/loaders";
 import { RelayPool } from "applesauce-relay/pool";
-import { KC_BITCOINERS_RELAY } from "@/config";
+import { KC_BITCOINERS_RELAY, nostrRelays } from "@/config";
 
 // Check if we're on the client side
 const isClient = typeof window !== "undefined";
@@ -37,10 +37,6 @@ if (isClient) {
 // Create loaders for the event store so profiles can be loaded
 createEventLoaderForStore(eventStore, pool, {
   cacheRequest,
-  lookupRelays: [
-    "wss://purplepag.es/",
-    "wss://index.hzrd149.com/",
-    "wss://indexer.coracle.social/",
-  ],
+  lookupRelays: nostrRelays,
   extraRelays: [KC_BITCOINERS_RELAY],
 });

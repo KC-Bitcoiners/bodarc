@@ -57,6 +57,7 @@ export interface AppConfig {
   pages: {
     home: PageConfig;
     calendar: PageConfig;
+    events: PageConfig;
     shop: PageConfig;
   };
 }
@@ -72,6 +73,12 @@ export const pagesConfig = config.pages;
 // Export API configurations from their respective pages
 export const meetupConfig = config.pages.calendar?.api?.meetup;
 export const btcmapConfig = config.pages.shop?.api?.btcmap;
+
+// Export events page configuration
+export const eventsConfig = config.pages.events;
+
+// Export events calendar configuration
+export const icalConfig = eventsConfig.calendar?.ical;
 
 // Export specific commonly used values
 export const {

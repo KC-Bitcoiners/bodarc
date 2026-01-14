@@ -1,4 +1,5 @@
 import { naddrEncode } from "applesauce-core/helpers";
+import { nostrRelays } from "@/config";
 
 export interface VendorData {
   name: string;
@@ -32,11 +33,7 @@ export async function fetchVendorAttestations(): Promise<VendorAttestation[]> {
   console.log("🏪 Starting to fetch vendor attestations...");
 
   // Use WebSocket connections to avoid CORS issues
-  const relays = [
-    "wss://relay.damus.io",
-    "wss://relay.snort.social",
-    "wss://nos.lol",
-  ];
+  const relays = nostrRelays;
 
   const allEvents: VendorAttestation[] = [];
 
@@ -49,9 +46,9 @@ export async function fetchVendorAttestations(): Promise<VendorAttestation[]> {
 
   console.log("🎯 Using vendor attestation filter:", filter);
 
-  // Try each relay and collect events, prioritizing Damus
-  const primaryRelay = "wss://relay.damus.io";
-  const backupRelays = relays.filter((r) => r !== primaryRelay);
+  // Try each relay and collect events, prioritizing first relay in config
+  const primaryRelay = relays[0];
+  const backupRelays = relays.slice(1);
 
   // First, fetch from Damus (primary relay)
   console.log(

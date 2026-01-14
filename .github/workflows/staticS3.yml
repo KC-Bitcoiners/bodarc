@@ -2,7 +2,7 @@ name: staticS3Deploy
 
 on:
   push:
-    branches: ["master", "dev", "bugFix", "nsyteDebug"]
+    branches: ["master", "dev", "bugFix", "nsyteDebug", "fixingHardCode"]
   schedule:
     - cron: "0 0 * * 1,3,6"
 
@@ -64,7 +64,7 @@ jobs:
           publish_profile: true
           verbose: false
           purge: true
-          force: true
+          # force: true
           
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4

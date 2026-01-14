@@ -1,6 +1,7 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { MeetupGroup, getVenueAddress } from "../lib/meetup";
+import { icalConfig } from "../config";
 
 // Helper function to format date for iCalendar (YYYYMMDDTHHMMSSZ format)
 const formatICalDate = (dateString: string): string => {
@@ -24,7 +25,7 @@ const escapeICalText = (text: string): string => {
 
 // Helper function to generate UID for events
 const generateUID = (eventId: string): string => {
-  return `${eventId}@kansas-city-bitcoin-meetup.com`;
+  return `${eventId}@${icalConfig?.domain || 'kansas-city-bitcoin-meetup.com'}`;
 };
 
 // Helper function to clean HTML from description
@@ -49,12 +50,12 @@ export function generateICalendar(group: MeetupGroup): string {
   let icalContent = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Kansas City Bitcoiners//Events//EN",
+    `PRODID:${icalConfig?.prodId || '//Kansas City Bitcoiners//Events//EN'}`,
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${escapeICalText(group.name)}`,
-    `X-WR-CALDESC:${escapeICalText(group.description || "Bitcoin meetups and events in Kansas City")}`,
-    "X-WR-TIMEZONE:America/Chicago",
+    `X-WR-CALDESC:${escapeICalText(group.description || icalConfig?.defaultDescription || "Bitcoin meetups and events")}`,
+    `X-WR-TIMEZONE:${icalConfig?.timezone || 'America/Chicago'}`,
   ];
 
   events.forEach((event) => {
