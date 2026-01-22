@@ -1,17 +1,24 @@
-import { useState, useEffect, useRef } from "react";
-import QRCode from "qrcode";
-import { WHITELISTED_PUBKEYS, nostrRelays } from "@/config";
+import { nostrRelays, WHITELISTED_PUBKEYS } from "@/config";
 import { pool } from "@/lib/nostr";
-import { normalizeToPubkey } from "applesauce-core/helpers";
-import { nip19 } from "nostr-tools";
+import {
+  getZapGoalAmount,
+  getZapGoalClosedAt,
+  getZapGoalRelays,
+  isValidZapGoal,
+  ZAP_GOAL_KIND,
+} from "@/utils/zapGoals";
+import { Filter } from "applesauce-core/helpers";
+import { kinds, NostrEvent } from "applesauce-core/helpers/event";
+import {
+  getEventPointerForEvent,
+  neventEncode,
+} from "applesauce-core/helpers/pointers";
+import QRCode from "qrcode";
+import { useEffect, useMemo, useState } from "react";
 
 export interface Zapraiser {
-  id: string;
-  pubkey: string;
-  content: string;
-  goal: number;
+  goal: NostrEvent;
   current: number;
-  created_at: number;
   author?: {
     name?: string;
     display_name?: string;
@@ -134,17 +141,22 @@ const NoteIdMenu = ({ noteId }: { noteId: string }) => {
 };
 
 // QR Code component for note ID (njump.me URL)
-const NoteQRCode = ({ noteId }: { noteId: string }) => {
+const NoteQRCode = ({
+  goal,
+  relays,
+}: {
+  goal: NostrEvent;
+  relays?: string[];
+}) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
+  const pointer = useMemo(
+    () => getEventPointerForEvent(goal, relays),
+    [goal, relays],
+  );
 
   useEffect(() => {
     // Generate QR code for the njump.me URL with encoded nevent
-    const nevent = nip19.neventEncode({
-      id: noteId,
-      kind: 1, // Text note event kind
-      relays: ["wss://relay.damus.io"],
-      author: "",
-    });
+    const nevent = neventEncode(pointer);
     const url = `https://njump.me/${nevent}`;
     QRCode.toDataURL(url, {
       width: 200,
@@ -160,7 +172,7 @@ const NoteQRCode = ({ noteId }: { noteId: string }) => {
       .catch((err) => {
         console.error("Error generating QR code:", err);
       });
-  }, [noteId]);
+  }, [goal, relays]);
 
   return (
     <div className="flex justify-center">
@@ -178,19 +190,22 @@ const NoteQRCode = ({ noteId }: { noteId: string }) => {
 };
 
 // QR Code component for nostr:nevent URI
-const NoteIdQRCode = ({ noteId }: { noteId: string }) => {
+const NoteIdQRCode = ({
+  goal,
+  relays,
+}: {
+  goal: NostrEvent;
+  relays?: string[];
+}) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
+  const pointer = useMemo(
+    () => getEventPointerForEvent(goal, relays),
+    [goal, relays],
+  );
 
   useEffect(() => {
     // Convert note ID to a proper nevent format using nip19
-    // We need to provide the event data to create a proper nevent
-    // For now, we'll create a simple nevent with just the ID
-    const nevent = nip19.neventEncode({
-      id: noteId,
-      kind: 1, // Text note event kind
-      relays: ["wss://relay.damus.io"],
-      author: "",
-    });
+    const nevent = neventEncode(pointer);
 
     QRCode.toDataURL(nevent, {
       width: 200,
@@ -206,7 +221,7 @@ const NoteIdQRCode = ({ noteId }: { noteId: string }) => {
       .catch((err) => {
         console.error("Error generating QR code:", err);
       });
-  }, [noteId]);
+  }, [goal, relays, pointer]);
 
   return (
     <div className="flex justify-center">
@@ -223,56 +238,155 @@ const NoteIdQRCode = ({ noteId }: { noteId: string }) => {
   );
 };
 
-// Fetch zapraisers from whitelisted users
+// Zapraiser Card Component
+const ZapraiserCard = ({
+  zapraiser,
+  index,
+}: {
+  zapraiser: Zapraiser;
+  index: number;
+}) => {
+  const goalAmount = getZapGoalAmount(zapraiser.goal) || 0;
+  const percentage =
+    goalAmount > 0 ? (zapraiser.current / goalAmount) * 100 : 0;
+  const remaining = Math.max(0, goalAmount - zapraiser.current);
+
+  return (
+    <div
+      key={zapraiser.goal.id}
+      className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all"
+      style={{
+        opacity: 1,
+        transform: "translateY(0)",
+        animation: `fadeIn 0.5s ease-in-out ${index * 0.1}s both`,
+        animationFillMode: "both",
+      }}
+    >
+      <div className="flex gap-6">
+        {/* Left Column: Metadata, Note Text, and Progress Bar */}
+        <div className="flex-grow">
+          {/* Author Info */}
+          <div className="flex items-center mb-4">
+            {zapraiser.author?.picture && (
+              <img
+                src={zapraiser.author.picture}
+                alt={zapraiser.author.name || "Author"}
+                className="w-12 h-12 rounded-full mr-3"
+              />
+            )}
+            <div>
+              <h3 className="font-semibold text-gray-900">
+                {zapraiser.author?.name ||
+                  zapraiser.author?.display_name ||
+                  "Anonymous"}
+              </h3>
+              <p className="text-sm text-gray-500">
+                {new Date(
+                  zapraiser.goal.created_at * 1000,
+                ).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+
+          {/* Zapraiser Content */}
+          <div className="mb-4 text-left">
+            <p className="text-gray-800 whitespace-pre-wrap">
+              {zapraiser.goal.content}
+            </p>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mb-4">
+            <ProgressBar
+              key={`${zapraiser.goal.id}-${zapraiser.current}`}
+              current={zapraiser.current}
+              goal={goalAmount}
+              label="Progress"
+            />
+          </div>
+        </div>
+
+        {/* Right Column: QR Code and Three Dot Menu */}
+        <div className="flex items-center gap-2">
+          {/* QR Code */}
+          <div className="flex flex-col items-center gap-1">
+            <div className="text-xs text-gray-500">Scan to zap</div>
+            <NoteQRCode
+              goal={zapraiser.goal}
+              relays={getZapGoalRelays(zapraiser.goal)}
+            />
+          </div>
+
+          {/* Three Dot Menu */}
+          <NoteIdMenu noteId={zapraiser.goal.id} />
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="flex justify-between items-center text-sm text-gray-600">
+          <span>
+            {zapraiser.current > 0
+              ? `${percentage.toFixed(1)}% funded`
+              : "No zaps yet"}
+          </span>
+          <span>
+            {remaining > 0
+              ? `${remaining.toLocaleString()} sats remaining`
+              : "Goal reached! 🎉"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Fetch zapraisers from whitelisted users (NIP-75 zap goals)
 async function fetchZapraisers(): Promise<Zapraiser[]> {
-  console.log("🔍 Starting to fetch zapraisers...");
+  console.log("🔍 Starting to fetch zap goals...");
 
   const filter = {
-    kinds: [1], // Text notes
+    kinds: [ZAP_GOAL_KIND], // NIP-75 zap goals
     authors: WHITELISTED_PUBKEYS,
-    limit: 10, // Get more events to find zapraisers
+    limit: 100,
   };
 
-  console.log("🎯 Using zapraisers filter:", filter);
+  console.log("🎯 Using zap goals filter:", filter);
   console.log("🌐 Using relays:", nostrRelays);
 
   const zapraisers: Zapraiser[] = [];
 
   try {
-    const eventsPromise = new Promise<any[]>((resolve, reject) => {
+    const eventsPromise = new Promise<NostrEvent[]>((resolve, reject) => {
       const timeout = setTimeout(() => {
         console.log("⏰ Request timeout");
         reject(new Error("Request timeout"));
       }, 30000); // 30 second timeout
 
-      const events: any[] = [];
+      const events: NostrEvent[] = [];
 
       pool.request(nostrRelays, filter).subscribe({
-        next: (nostrEvent) => {
-          console.log(`🎯 Found potential zapraiser:`, nostrEvent.id);
+        next: (nostrEvent: NostrEvent) => {
+          console.log(`🎯 Found potential zap goal:`, nostrEvent.id);
 
-          // Check if event has a zapraiser tag with a goal amount
-          const zapraiserTag = nostrEvent.tags?.find(
-            (tag: string[]) => tag[0] === "zapraiser",
-          );
-
-          if (zapraiserTag && zapraiserTag[1]) {
-            const goal = parseInt(zapraiserTag[1]);
-            if (!isNaN(goal) && goal > 0) {
-              events.push(nostrEvent);
-              console.log(
-                `➕ Added zapraiser: ${nostrEvent.content.substring(0, 50)}... Goal: ${goal} sats`,
-              );
-            }
+          // Validate it's a valid zap goal event
+          if (isValidZapGoal(nostrEvent)) {
+            events.push(nostrEvent);
+            const amount = getZapGoalAmount(nostrEvent);
+            console.log(
+              `➕ Added zap goal: ${nostrEvent.content.substring(0, 50)}... Goal: ${amount} sats`,
+            );
+          } else {
+            console.log(`⏭ Skipping invalid zap goal: ${nostrEvent.id}`);
           }
         },
         error: (error) => {
-          console.error("💥 Error fetching zapraisers:", error);
+          console.error("💥 Error fetching zap goals:", error);
           clearTimeout(timeout);
           reject(error);
         },
         complete: () => {
-          console.log("📭 End of stored zapraisers");
+          console.log("📭 End of stored zap goals");
           clearTimeout(timeout);
           resolve(events);
         },
@@ -281,47 +395,44 @@ async function fetchZapraisers(): Promise<Zapraiser[]> {
 
     const events = await eventsPromise;
 
-    // Convert events to Zapraiser format
+    // Convert events to Zapraiser format using helper functions
     for (const event of events) {
-      const zapraiserTag = event.tags?.find(
-        (tag: string[]) => tag[0] === "zapraiser",
-      );
+      if (!isValidZapGoal(event)) continue;
 
-      if (zapraiserTag && zapraiserTag[1]) {
-        const goal = parseInt(zapraiserTag[1]);
-        if (!isNaN(goal) && goal > 0) {
-          const zapraiser: Zapraiser = {
-            id: event.id,
-            pubkey: event.pubkey,
-            content: event.content,
-            goal: goal,
-            current: 0, // Will be calculated later
-            created_at: event.created_at,
-          };
+      const amount = getZapGoalAmount(event);
+      if (amount === null) continue;
 
-          zapraisers.push(zapraiser);
-        }
-      }
+      const zapraiser: Zapraiser = {
+        goal: event,
+        current: 0,
+      };
+
+      zapraisers.push(zapraiser);
     }
   } catch (error) {
-    console.warn("⚠️ Failed to fetch zapraisers:", error);
+    console.warn("⚠️ Failed to fetch zap goals:", error);
   }
 
-  console.log(`📊 Total zapraisers fetched: ${zapraisers.length}`);
+  console.log(`📊 Total zap goals fetched: ${zapraisers.length}`);
   return zapraisers;
 }
 
-// Fetch zap receipts for a specific zapraiser
-async function fetchZapReceipts(zapraiserId: string): Promise<ZapReceipt[]> {
-  console.log(`🔍 Fetching zap receipts for zapraiser: ${zapraiserId}`);
+// Fetch zap receipts for a specific zap goal
+async function fetchZapReceipts(goal: NostrEvent): Promise<ZapReceipt[]> {
+  console.log(`🔍 Fetching zap receipts for zap goal: ${goal.id}`);
 
-  const filter = {
-    kinds: [9735], // Zap receipts
-    "#e": [zapraiserId], // Filter for receipts referencing this zapraiser
-    limit: 100,
+  const relays = getZapGoalRelays(goal);
+  const closedAt = getZapGoalClosedAt(goal);
+  const filter: Filter = {
+    kinds: [kinds.Zap], // Zap receipts
+    "#e": [goal.id], // Filter for receipts referencing this zap goal
   };
 
+  // Set upper limit on zaps
+  if (closedAt) filter.until = closedAt;
+
   console.log("🎯 Using zap receipts filter:", filter);
+  console.log("🌐 Using goal relays:", relays);
 
   const receipts: ZapReceipt[] = [];
   const receiptIds = new Set<string>(); // Track unique receipt IDs to prevent duplicates
@@ -335,9 +446,20 @@ async function fetchZapReceipts(zapraiserId: string): Promise<ZapReceipt[]> {
 
       const events: any[] = [];
 
-      pool.request(nostrRelays, filter).subscribe({
+      // Use the relays from the goal event, fallback to nostrRelays if empty
+      const relaysToUse = relays.length > 0 ? relays : nostrRelays;
+
+      pool.request(relaysToUse, filter).subscribe({
         next: (nostrEvent) => {
           console.log(`🎯 Found zap receipt:`, nostrEvent.id);
+
+          // Filter by closed_at if present - only count zaps before closed_at
+          if (closedAt && nostrEvent.created_at > closedAt) {
+            console.log(
+              `⏭ Skipping zap receipt after closed_at: ${nostrEvent.id}`,
+            );
+            return;
+          }
 
           // Extract amount from bolt11 tag or description tag
           const amount = extractZapAmount(nostrEvent);
@@ -353,12 +475,12 @@ async function fetchZapReceipts(zapraiserId: string): Promise<ZapReceipt[]> {
             const receipt: ZapReceipt = {
               id: nostrEvent.id,
               pubkey: nostrEvent.pubkey,
-              amount: amount,
-              zapraiserId: zapraiserId,
               created_at: nostrEvent.created_at,
+              amount: amount,
+              zapraiserId: goal.id,
             };
 
-            events.push(nostrEvent);
+            events.push(receipt);
             receipts.push(receipt);
             console.log(`➕ Added zap receipt: ${amount} sats`);
           }
@@ -377,9 +499,9 @@ async function fetchZapReceipts(zapraiserId: string): Promise<ZapReceipt[]> {
     });
 
     await eventsPromise;
-    console.log(`📊 Total zap receipts for ${zapraiserId}: ${receipts.length}`);
+    console.log(`📊 Total zap receipts for ${goal.id}: ${receipts.length}`);
   } catch (error) {
-    console.warn(`⚠️ Failed to fetch zap receipts for ${zapraiserId}:`, error);
+    console.warn(`⚠️ Failed to fetch zap receipts for ${goal.id}:`, error);
   }
 
   return receipts;
@@ -509,8 +631,8 @@ export default function DonatePage() {
       // Update each zapraiser with new zap receipts
       const updatedzapraisers = await Promise.all(
         zapraisers.map(async (zapraiser: Zapraiser) => {
-          // Fetch fresh zap receipts for this zapraiser
-          const receipts = await fetchZapReceipts(zapraiser.id);
+          // Fetch fresh zap receipts for this zap goal
+          const receipts = await fetchZapReceipts(zapraiser.goal);
           const totalZapped = receipts.reduce(
             (sum, receipt) => sum + receipt.amount,
             0,
@@ -542,15 +664,17 @@ export default function DonatePage() {
         // For each zapraiser, fetch its zap receipts and author metadata
         const zapraisersWithProgress = await Promise.all(
           zapraisersData.map(async (zapraiser: Zapraiser) => {
-            // Fetch zap receipts for this zapraiser
-            const receipts = await fetchZapReceipts(zapraiser.id);
+            // Fetch zap receipts for this zap goal using its relays
+            const receipts = await fetchZapReceipts(zapraiser.goal);
             const totalZapped = receipts.reduce(
               (sum, receipt) => sum + receipt.amount,
               0,
             );
 
             // Fetch author metadata
-            const authorMetadata = await fetchUserMetadata(zapraiser.pubkey);
+            const authorMetadata = await fetchUserMetadata(
+              zapraiser.goal.pubkey,
+            );
 
             return {
               ...zapraiser,
@@ -562,7 +686,7 @@ export default function DonatePage() {
 
         // Sort by creation time (newest first)
         zapraisersWithProgress.sort(
-          (a: Zapraiser, b: Zapraiser) => b.created_at - a.created_at,
+          (a: Zapraiser, b: Zapraiser) => b.goal.created_at - a.goal.created_at,
         );
 
         setzapraisers(zapraisersWithProgress);
@@ -624,89 +748,11 @@ export default function DonatePage() {
         {zapraisers.length > 0 ? (
           <div className="space-y-8">
             {zapraisers.map((zapraiser, index) => (
-              <div
-                key={zapraiser.id}
-                className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all"
-                style={{
-                  opacity: 1,
-                  transform: "translateY(0)",
-                  animation: `fadeIn 0.5s ease-in-out ${index * 0.1}s both`,
-                  animationFillMode: "both",
-                }}
-              >
-                <div className="flex gap-6">
-                  {/* Left Column: Metadata, Note Text, and Progress Bar */}
-                  <div className="flex-grow">
-                    {/* Author Info */}
-                    <div className="flex items-center mb-4">
-                      {zapraiser.author?.picture && (
-                        <img
-                          src={zapraiser.author.picture}
-                          alt={zapraiser.author.name || "Author"}
-                          className="w-12 h-12 rounded-full mr-3"
-                        />
-                      )}
-                      <div>
-                        <h3 className="font-semibold text-gray-900">
-                          {zapraiser.author?.name ||
-                            zapraiser.author?.display_name ||
-                            "Anonymous"}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          {new Date(
-                            zapraiser.created_at * 1000,
-                          ).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Zapraiser Content */}
-                    <div className="mb-4 text-left">
-                      <p className="text-gray-800 whitespace-pre-wrap">
-                        {zapraiser.content}
-                      </p>
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div className="mb-4">
-                      <ProgressBar
-                        key={`${zapraiser.id}-${zapraiser.current}`}
-                        current={zapraiser.current}
-                        goal={zapraiser.goal}
-                        label="Progress"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Right Column: QR Code and Three Dot Menu */}
-                  <div className="flex items-center gap-2">
-                    {/* QR Code */}
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="text-xs text-gray-500">Scan to zap</div>
-                      <NoteQRCode noteId={zapraiser.id} />
-                    </div>
-
-                    {/* Three Dot Menu */}
-                    <NoteIdMenu noteId={zapraiser.id} />
-                  </div>
-                </div>
-
-                {/* Stats */}
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex justify-between items-center text-sm text-gray-600">
-                    <span>
-                      {zapraiser.current > 0
-                        ? `${((zapraiser.current / zapraiser.goal) * 100).toFixed(1)}% funded`
-                        : "No zaps yet"}
-                    </span>
-                    <span>
-                      {zapraiser.goal - zapraiser.current > 0
-                        ? `${(zapraiser.goal - zapraiser.current).toLocaleString()} sats remaining`
-                        : "Goal reached! 🎉"}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <ZapraiserCard
+                key={zapraiser.goal.id}
+                zapraiser={zapraiser}
+                index={index}
+              />
             ))}
           </div>
         ) : (
