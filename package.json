@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@types/qrcode": "^1.5.6",
     "applesauce-common": "^5.0.0",
     "applesauce-core": "^5.0.0",
     "applesauce-loaders": "^5.0.0",
@@ -20,6 +21,7 @@
     "graphql-request": "^7.4.0",
     "leaflet": "^1.9.4",
     "next": "15.3.4",
+    "qrcode": "^1.5.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-leaflet": "^5.0.0",
