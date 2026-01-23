@@ -1,0 +1,65 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID://Kansas City Bitcoiners//Events//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Kansas City Bitcoin Meetup Group
+X-WR-CALDESC:<p>We're a group focused on all things Bitcoin. All experience levels welcome\, whether you're new and curious or have been in the scene for years.</p> \n<p>We meet regularly for casual discussions and presentations on topics like the protocol and software\, economics\, trading\, storage techniques\, investing\, and mining.</p> \n<p>Come out to meet\, learn from\, and share ideas with fellow Bitcoiners!</p> \n<p>Note that we are not a "blockchain" or "cryptocurrency" group. There are plenty of those around. We're Bitcoiners here to talk Bitcoin.</p>
+X-WR-TIMEZONE:America/Chicago
+BEGIN:VEVENT
+UID:311997123@kansas-city-bitcoin-meetup.com
+DTSTART:20260205T003000Z
+DTEND:20260205T023000Z
+DTSTAMP:20260123T202248Z
+CREATED:20251113T221813Z
+LAST-MODIFIED:20260123T202248Z
+SUMMARY:Circular Economy Building
+DESCRIPTION:Bitcoin is money\, let's use it as such!\nBring whatever wares you have for sale\, browse others\, and have a beer.\n\nEvent URL: https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311997123/
+LOCATION:1725 McGee Street\, Kansas City\, MO
+URL:https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311997123/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:311998847@kansas-city-bitcoin-meetup.com
+DTSTART:20260206T133000Z
+DTEND:20260206T150000Z
+DTSTAMP:20260123T202248Z
+CREATED:20251114T002124Z
+LAST-MODIFIED:20260123T202248Z
+SUMMARY:Coffee with KC Bitcoiners!
+DESCRIPTION:**Join us for KC Bitcoiners Coffee**\n\n🍩☕\nCome hang out\, grab a coffee\, and connect with fellow Bitcoiners. Bring your questions\, thoughts\, or the latest news. Whether you're new to Bitcoin or have been around since the early days\, you're welcome here.\n\n🚫 Just a reminder: we're not a "blockchain" or "crypto" group. We're here to talk Bitcoin.\n\nLook forward to seeing you there! Let us know if you have any questions.\n\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\nDONATE to support future KC Bitcoiners events:\n[https://btcpay0.voltageapp.io/apps/26q7Q6PpDTZFoUBfpMko6jSzm4od/pos](https://btcpay0.voltageapp.io/apps/26q7Q6PpDTZFoUBfpMko6jSzm4od/pos)\n\nEvent URL: https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311998847/
+LOCATION:200 NE Chipman Rd\, Lee's Summit\, MO
+URL:https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311998847/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:311998911@kansas-city-bitcoin-meetup.com
+DTSTART:20260306T133000Z
+DTEND:20260306T150000Z
+DTSTAMP:20260123T202248Z
+CREATED:20251114T003101Z
+LAST-MODIFIED:20260123T202248Z
+SUMMARY:Coffee with KC Bitcoiners!
+DESCRIPTION:**Join us for KC Bitcoiners Coffee**\n\n🍩☕\nCome hang out\, grab a coffee\, and connect with fellow Bitcoiners. Bring your questions\, thoughts\, or the latest news. Whether you're new to Bitcoin or have been around since the early days\, you're welcome here.\n\n🚫 Just a reminder: we're not a "blockchain" or "crypto" group. We're here to talk Bitcoin.\n\nLook forward to seeing you there! Let us know if you have any questions.\n\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\nDONATE to support future KC Bitcoiners events:\n[https://btcpay0.voltageapp.io/apps/26q7Q6PpDTZFoUBfpMko6jSzm4od/pos](https://btcpay0.voltageapp.io/apps/26q7Q6PpDTZFoUBfpMko6jSzm4od/pos)\n\nEvent URL: https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311998911/
+LOCATION:6223 Brookside Blvd\, Kansas City\, MO
+URL:https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311998911/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:311998915@kansas-city-bitcoin-meetup.com
+DTSTART:20260320T123000Z
+DTEND:20260320T140000Z
+DTSTAMP:20260123T202248Z
+CREATED:20251114T003210Z
+LAST-MODIFIED:20260123T202248Z
+SUMMARY:Coffee with KC Bitcoiners!
+DESCRIPTION:**Join us for KC Bitcoiners Coffee**\n\n🍩☕\nCome hang out\, grab a coffee\, and connect with fellow Bitcoiners. Bring your questions\, thoughts\, or the latest news. Whether you're new to Bitcoin or have been around since the early days\, you're welcome here.\n\n🚫 Just a reminder: we're not a "blockchain" or "crypto" group. We're here to talk Bitcoin.\n\nLook forward to seeing you there! Let us know if you have any questions.\n\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\nDONATE to support future KC Bitcoiners events:\n[https://btcpay0.voltageapp.io/apps/26q7Q6PpDTZFoUBfpMko6jSzm4od/pos](https://btcpay0.voltageapp.io/apps/26q7Q6PpDTZFoUBfpMko6jSzm4od/pos)\n\nEvent URL: https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311998915/
+LOCATION:13440 Santa Fe Trail Dr\, Lenexa\, KS 66215\,\, Lenexa\, KS
+URL:https://www.meetup.com/kansas-city-bitcoin-meetup-group/events/311998915/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

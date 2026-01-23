@@ -1,9 +1,13 @@
 {
-  "mcpServers": {
-    "nostr": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@nostrbook/mcp@latest"]
-    }
-  }
+	"mcpServers": {
+		"nostr": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@nostrbook/mcp@latest"]
+		},
+		"svelte": {
+			"command": "npx",
+			"args": ["-y", "@sveltejs/mcp"]
+		}
+	}
 }

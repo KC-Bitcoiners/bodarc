@@ -15,7 +15,7 @@
         "url": "https://github.com/santa-fe-bitcoiners/website",
         "icon": "GitHubIcon",
         "ariaLabel": "Visit our GitHub repository"
-    }, 
+    },
             "meetup": {
                 "urlname": "santa-fe-bitcoin-meetup-group",
                 "url": "https://www.meetup.com/santa-fe-bitcoin-meetup-group/"
@@ -31,8 +31,7 @@
         "relays": [
             "wss://relay.damus.io",
             "wss://nos.lol",
-            "wss://relay.snort.social",
-            "wss://kcbtc.hzrd149.com/"
+            "wss://relay.snort.social"
         ],
         "whitelistedNpubs": [
             "npub16ux4qzg4qjue95vr3q327fzata4n594c9kgh4jmeyn80v8k54nhqg6lra7",
@@ -40,7 +39,7 @@
             "npub187w4ykkurr3e89mm0rg5p49x6lveqtq0pp0um7qyk6xyrpeerx3s84exkz",
             "npub1nv5c7sj2zxtjv7uayp2q2mneymm39mfp93wjhl5287y6yp6ey02qrsjhcn",
             "npub1yvscx9vrmpcmwcmydrm8lauqdpngum4ne8xmkgc2d4rcaxrx7tkswdwzdu"
-        ]   
+        ]
     },
   "pages": {
     "home": {

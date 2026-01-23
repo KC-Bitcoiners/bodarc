@@ -1,5 +1,5 @@
 import { GraphQLClient, gql } from "graphql-request";
-import { meetupConfig } from "@/config";
+import { meetupConfig } from "$lib/config";
 
 // TypeScript interfaces for the GraphQL response
 export interface Venue {
